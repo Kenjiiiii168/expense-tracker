@@ -17,7 +17,7 @@ function App() {
     startEdit,
     cancelEdit,
     deleteTransaction,
-    totalExpense, // ตรวจสอบว่า hook return ค่านี้ออกมา
+    totalExpense,
     totalIncome,
     balance,
     filteredTransactions

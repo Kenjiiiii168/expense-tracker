@@ -1,33 +1,27 @@
 // Component สำหรับแสดงการ์ดสรุปยอดเงิน (รายรับ, รายจ่าย, คงเหลือ)
+import SummaryCard from './SummaryCard'
+
 function SummaryCards({ totalIncome, totalExpense, balance }) {
     return (
         <div className="summary-cards">
-            {/* การ์ดรายรับ */}
-            <div className="summary-card income">
-                <div className="card-icon">📈</div>
-                <div className="card-content">
-                    <p className="card-label">รายรับ</p>
-                    <p className="card-amount">฿{totalIncome.toLocaleString()}</p>
-                </div>
-            </div>
-
-            {/* การ์ดรายจ่าย */}
-            <div className="summary-card expense">
-                <div className="card-icon">📉</div>
-                <div className="card-content">
-                    <p className="card-label">รายจ่าย</p>
-                    <p className="card-amount">฿{totalExpense.toLocaleString()}</p>
-                </div>
-            </div>
-
-            {/* การ์ดยอดคงเหลือ */}
-            <div className="summary-card balance">
-                <div className="card-icon">💵</div>
-                <div className="card-content">
-                    <p className="card-label">คงเหลือ</p>
-                    <p className="card-amount">฿{balance.toLocaleString()}</p>
-                </div>
-            </div>
+            <SummaryCard
+                title="รายรับ"
+                amount={totalIncome}
+                icon="📈"
+                className="income"
+            />
+            <SummaryCard
+                title="รายจ่าย"
+                amount={totalExpense}
+                icon="📉"
+                className="expense"
+            />
+            <SummaryCard
+                title="คงเหลือ"
+                amount={balance}
+                icon="💵"
+                className="balance"
+            />
         </div>
     )
 }

@@ -1,8 +1,14 @@
-import { useState } from 'react'
+import { useState, useContext } from 'react'
+import { GlobalContext } from '../context/GlobalState'
 
 export const useTransactions = () => {
-    // State สำหรับเก็บรายการทั้งหมด
-    const [transactions, setTransactions] = useState([])
+    // ใช้ Global State แทน Local State สำหรับ transactions
+    const {
+        transactions,
+        addTransaction,
+        deleteTransaction: deleteTransactionContext,
+        editTransaction
+    } = useContext(GlobalContext)
 
     // State สำหรับฟอร์ม
     const [formData, setFormData] = useState({
@@ -34,11 +40,13 @@ export const useTransactions = () => {
 
         if (editId) {
             // กรณีแก้ไขรายการเดิม
-            setTransactions(transactions.map(t =>
-                t.id === editId
-                    ? { ...t, ...formData, amount: parseFloat(formData.amount) }
-                    : t
-            ))
+            const updatedTransaction = {
+                id: editId,
+                ...formData,
+                amount: parseFloat(formData.amount),
+                date: transactions.find(t => t.id === editId)?.date || new Date().toLocaleDateString('th-TH')
+            }
+            editTransaction(updatedTransaction)
             setEditId(null)
         } else {
             // กรณีเพิ่มรายการใหม่
@@ -48,7 +56,7 @@ export const useTransactions = () => {
                 amount: parseFloat(formData.amount),
                 date: new Date().toLocaleDateString('th-TH')
             }
-            setTransactions([newTransaction, ...transactions])
+            addTransaction(newTransaction)
         }
 
         // รีเซ็ตฟอร์ม
@@ -84,7 +92,7 @@ export const useTransactions = () => {
     // ฟังก์ชันลบรายการ
     const deleteTransaction = (id) => {
         if (window.confirm('คุณต้องการลบรายการนี้ใช่หรือไม่?')) {
-            setTransactions(transactions.filter(t => t.id !== id))
+            deleteTransactionContext(id)
             // ถ้าลบรายการที่กำลังแก้ไขอยู่ ให้ยกเลิกการแก้ไข
             if (editId === id) {
                 cancelEdit()
